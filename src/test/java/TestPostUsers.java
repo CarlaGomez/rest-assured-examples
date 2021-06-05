@@ -1,6 +1,7 @@
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.json.simple.JSONObject;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -48,5 +49,36 @@ public class TestPostUsers {
                 .and()
                 .body("$", hasKey("createdAt")).log().all()
         ;
+    }
+
+    @DataProvider(name = "DataForPost")
+    public Object[][] dataForPost() {
+
+        return new Object[][]{
+                {"Carla", "QA Engineer"},
+                {"Manuel", "Project Manager"}
+        };
+    }
+
+    @Test(dataProvider = "DataForPost")
+    public void postUserDataDriven(String name, String job) {
+
+        RestAssured.baseURI = baseUrl;
+
+        JSONObject request = new JSONObject();
+        request.put("name", name);
+        request.put("job", job);
+        System.out.println(request.toJSONString());
+
+        given().
+                contentType(ContentType.JSON).
+                accept(ContentType.JSON).
+                header("Content-Type", "application/json").
+                body(request.toJSONString()).
+                when().
+                post(baseUrl + "/users?page=2").
+                then().
+                statusCode(201).
+                log().all();
     }
 }
