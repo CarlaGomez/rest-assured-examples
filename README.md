@@ -1,5 +1,5 @@
 # rest-assured-examples
-These are some examples of API testing with REST assured
+Here we have some examples of API testing with REST assured
 
 REST assured is a java DSL for API automation, the syntax is pretty similar to gherkin.
 
